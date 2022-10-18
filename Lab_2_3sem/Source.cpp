@@ -127,11 +127,14 @@ public:
 		}
 	}
 
-	void Add(DATE date) {
-		AddDays(date.GetDay());
-		AddWeeks(date.GetWeek());
-		AddMonths(date.GetMonth());
-		AddYears(date.GetYear());
+	void Add(DATE date1, DATE date2) {
+		day = date1.GetDay();
+		month = date1.GetMonth();
+		year = date1.GetYear();
+		AddDays(date2.GetDay());
+		AddWeeks(date2.GetWeek());
+		AddMonths(date2.GetMonth());
+		AddYears(date2.GetYear());
 	}
 
 	void SubtractDays(int d) {
@@ -178,7 +181,6 @@ public:
 
 	void Subtract(DATE date1, DATE date2) {
 		day = date1.GetDay();
-		week = date1.GetWeek();
 		month = date1.GetMonth();
 		year = date1.GetYear();
 		SubtractDays(date2.GetDay());
@@ -188,8 +190,14 @@ public:
 	}
 
 	DATE operator+(DATE date0) {
-		DATE date;
-		date.Add(date0);
+		DATE date, sub_date = { GetDay(), GetWeek(), GetMonth(), GetYear() };
+		date.Add(sub_date, date0);
+		return date;
+	}
+
+	DATE operator-(DATE date0) {
+		DATE date, sub_date = { GetDay(), GetWeek(), GetMonth(), GetYear() };
+		date.Subtract(sub_date, date0);
 		return date;
 	}
 
@@ -216,32 +224,18 @@ ostream& operator << (ostream& os, DATE& date) {
 }
 
 int main() {
-	DATE date1 = DATE(11, 0, 10, 2022);
+	DATE date1 = DATE(18, 0, 10, 2022);
 	date1.SetWeek((date1.ConversionMonthToDays() + date1.GetDay()) * 52 / 365 + 1);
 	cout << date1 << endl;
 
-	/*for (int i = 1; i <= 666; i++) {
-		date1 = DATE(11, 0, 10, 2022);
-		date1.AddDays(i);
-		date1.SetWeek((date1.ConversionMonthToDays() + date1.GetDay()) * 52 / 365 + 1);
-		cout << date1.GetDay() << " " << date1.GetMonth() << " " << date1.GetYear() << " (" << date1.GetWeek() << "/53)" << endl;
-	}*/
-
-	Dates lot{666, 0, 0, 0};
+	Dates lot{ 11, 0, 10, 2022 };
 	DATE length_of_time = lot;
-	cout << length_of_time << endl;
-	DATE sum;
-	sum = sum + date1;
-	//sum = sum + length_of_time;
-	//+length_of_time;
-	//sum.Add(length_of_time);
-	sum.SetWeek((sum.ConversionMonthToDays() + sum.GetDay()) * 52 / 365 + 1);
-	//date1.AddWeeks(length_of_time.GetWeek()); 
-    //date1.AddMonths(length_of_time.GetMonth());
-	//date1.AddYears(length_of_time.GetYear());
-	cout << sum << endl;
-	date1.Subtract(sum, length_of_time);
-	date1.SetWeek((date1.ConversionMonthToDays() + date1.GetDay()) * 52 / 365 + 1);
-	cout << date1 << endl;
 
+	DATE sum;
+	sum = date1 - length_of_time;
+	sum.SetWeek((sum.ConversionMonthToDays() + sum.GetDay()) * 52 / 365 + 1);
+	cout << sum << endl;
+
+	date1 = sum + length_of_time;
+	cout << date1 << endl;
 }
