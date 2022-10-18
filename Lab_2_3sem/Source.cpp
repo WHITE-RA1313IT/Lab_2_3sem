@@ -189,6 +189,57 @@ public:
 		SubtractYears(date2.GetYear());
 	}
 
+	bool Less(DATE date2) {
+		if (GetYear() < date2.GetYear()) {
+			return true;
+		}
+		else {
+			if (GetMonth() < date2.GetMonth()) {
+				return true;
+			}
+			else {
+				if (GetDay() < date2.GetDay()) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	bool More(DATE date2) {
+		if (GetYear() > date2.GetYear()) {
+			return true;
+		}
+		else {
+			if (GetMonth() > date2.GetMonth()) {
+				return true;
+			}
+			else {
+				if (GetDay() > date2.GetDay()) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	bool Equally(DATE date2) {
+		if (GetYear() != date2.GetYear() ) {
+			return false;
+		}
+		else {
+			if (GetMonth() != date2.GetMonth()) {
+				return false;
+			}
+			else {
+				if (GetDay() != date2.GetDay()) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+
 	DATE operator+(DATE date0) {
 		DATE date, sub_date = { GetDay(), GetWeek(), GetMonth(), GetYear() };
 		date.Add(sub_date, date0);
@@ -199,6 +250,14 @@ public:
 		DATE date, sub_date = { GetDay(), GetWeek(), GetMonth(), GetYear() };
 		date.Subtract(sub_date, date0);
 		return date;
+	}
+
+	bool operator<(DATE date0) {
+		return Less(date0);
+	}
+
+	bool operator==(DATE date0) {
+		return Equally(date0);
 	}
 
 private:
@@ -228,14 +287,15 @@ int main() {
 	date1.SetWeek((date1.ConversionMonthToDays() + date1.GetDay()) * 52 / 365 + 1);
 	cout << date1 << endl;
 
-	Dates lot{ 11, 0, 10, 2022 };
+	Dates lot{ 18, 0, 10, 2022 };
 	DATE length_of_time = lot;
-
+	if (length_of_time == date1) cout << "ravno" << endl;
+	else cout << "ne ravno" << endl;
 	DATE sum;
-	sum = date1 - length_of_time;
+	sum = date1 + length_of_time;
 	sum.SetWeek((sum.ConversionMonthToDays() + sum.GetDay()) * 52 / 365 + 1);
 	cout << sum << endl;
 
-	date1 = sum + length_of_time;
+	date1 = sum - length_of_time;
 	cout << date1 << endl;
 }
